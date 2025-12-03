@@ -50,7 +50,9 @@ FileActions::FileActions(const FileActions &obj) {
 
 void FileActions::registerActions(
     std::initializer_list<std::pair<std::string, int>> &&actions) {
-  actions_ = actions;
+      for (auto i = actions.begin(); i != actions.end(); ++i) {
+        actions_.push_back(*i);
+    }
 }
 myerror_t FileActions::executeActions() {
   myerror_t errorStatus = OK;
