@@ -9,12 +9,19 @@ int main(int argc, char const *argv[])
     mcal::gpio::Gpio_Value_t Value = mcal::gpio::Gpio_Value_t::LOW;
     
     mcal::gpio::GPIO myledpin (PinNumber, Direction, Value  );
-    for (int i = 0; i < 10; i++)
+    int led_num = myledpin.GetPinNumber();
+    std::cout << "led_num: " << led_num << "\n";
+    int value = myledpin.GetPinValue();
+    for (int i = 0; i < 6; i++)
     {
         sleep(1);
         myledpin.SetPin(mcal::gpio::Gpio_Value_t::HIGH);
+        value = myledpin.GetPinValue();
+        std::cout << "value: " << value << "\n";
         sleep(1);
         myledpin.SetPin(mcal::gpio::Gpio_Value_t::LOW);
+        value = myledpin.GetPinValue();
+        std::cout << "value: " << value << "\n";
     }
     
     std::cout << "Bye World!\n";

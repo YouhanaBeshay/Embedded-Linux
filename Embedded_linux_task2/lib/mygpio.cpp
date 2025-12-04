@@ -14,75 +14,28 @@ namespace gpio {
 
 //==== Private helper functions ===
 
-// void GPIO::OpenExportFile(int PinNumber) {
-//   std::string exportPath = "/sys/class/gpio/export";
-//   std::string PinNumberString = std::to_string(PinNumber);
-//   FdExport_ = open(exportPath.c_str(), O_RDWR);
-//   write(FdExport_, PinNumberString.c_str(), PinNumberString.size());
-//   close(FdExport_); // Close the export file (we will open 1 gpio pin for
-//   class
-//                     // so need for it anymore)
-
-//   // TODO: ask wether we should wait for the kernel to export the pin
-//   //  wait for kernel to export the pin
-//   usleep(100000);
-// }
-// void GPIO::OpenDirectionFile(int PinNumber) {
-//   std::string PinNumberString = std::to_string(PinNumber);
-//   std::string directionPath =
-//       "/sys/class/gpio/gpio" + PinNumberString + "/direction";
-//   FdDirection_ = open(directionPath.c_str(), O_RDWR);
-// }
-
-// void GPIO::OpenValueFile(int PinNumber) {
-//   std::string PinNumberString = std::to_string(PinNumber);
-//   std::string valuePath = "/sys/class/gpio/gpio" + PinNumberString +
-//   "/value"; FdValue_ = open(valuePath.c_str(), O_RDWR);
-// }
-
 void GPIO::OpenExportFile(int PinNumber) {
   std::string exportPath = "/sys/class/gpio/export";
   std::string PinNumberString = std::to_string(PinNumber);
-
   FdExport_ = open(exportPath.c_str(), O_WRONLY);
-  if (FdExport_ == -1) {
-    perror(("Failed to open export file: " + exportPath).c_str());
-    return;
-  }
+  write(FdExport_, PinNumberString.c_str(), PinNumberString.size());
+  close(FdExport_); // Close the export file (we will open 1 gpio pin for object
+                    // so no need for it anymore)
 
-  if (write(FdExport_, PinNumberString.c_str(), PinNumberString.size()) == -1) {
-    perror("Failed to write to export file");
-    close(FdExport_);
-    FdExport_ = -1;
-    return;
-  }
-
-  close(FdExport_);
-  FdExport_ = -1; // reset FD after closing
-
-  // Wait for kernel to export the pin
+  //  wait for kernel to export the pin
   usleep(100000);
 }
-
 void GPIO::OpenDirectionFile(int PinNumber) {
   std::string PinNumberString = std::to_string(PinNumber);
   std::string directionPath =
       "/sys/class/gpio/gpio" + PinNumberString + "/direction";
-
   FdDirection_ = open(directionPath.c_str(), O_RDWR);
-  if (FdDirection_ == -1) {
-    perror(("Failed to open direction file: " + directionPath).c_str());
-  }
 }
 
 void GPIO::OpenValueFile(int PinNumber) {
   std::string PinNumberString = std::to_string(PinNumber);
   std::string valuePath = "/sys/class/gpio/gpio" + PinNumberString + "/value";
-
   FdValue_ = open(valuePath.c_str(), O_RDWR);
-  if (FdValue_ == -1) {
-    perror(("Failed to open value file: " + valuePath).c_str());
-  }
 }
 
 //=== Construstors ===
