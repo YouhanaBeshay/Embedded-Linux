@@ -37,3 +37,8 @@
    cd /home/pi/some_directory/Embedded_linux_task2/src
    ./main.out
    ```
+## Demo Video:
+
+
+https://github.com/user-attachments/assets/8db17218-e386-4562-b094-863330b4280e
+
