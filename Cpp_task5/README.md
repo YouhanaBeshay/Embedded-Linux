@@ -1,3 +1,5 @@
+
+https://github.com/user-attachments/assets/99d664de-f8c9-4462-a58f-a63427378c9f
 # C++ Multiple inheritance task:
 - A C++ application for **Raspberry Pi 3b+** that demonstrates:
     - Multiple inheritance (diamond shape)
@@ -44,4 +46,8 @@
    - ```./inheritanceApp ```
 
 # Demo vid:
+
+
+https://github.com/user-attachments/assets/560e73f8-ff99-40e5-b709-68db05144ea6
+
 
