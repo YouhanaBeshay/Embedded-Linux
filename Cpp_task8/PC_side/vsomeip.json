@@ -1,0 +1,52 @@
+{
+    "unicast" : "192.168.1.50",
+    "logging" :
+    { 
+        "level" : "debug",
+        "console" : "true",
+        "file" : { "enable" : "false", "path" : "/tmp/vsomeip.log" },
+        "dlt" : "false"
+    },
+    "applications" : 
+    [
+        {
+            "name" : "CapsLock Service",
+            "id" : "0x0100"
+        }
+    ],
+    "services" :
+    [
+        {
+            "service" : "0x4666",
+            "instance" : "0x0001",
+            "unreliable" : "30509",
+            "eventgroups" :
+            [
+                {
+                    "eventgroup" : "0x4465",
+                    "events" : [ "0x8778" ],
+                    "multicast" :
+                    {
+                        "address" : "224.224.224.246",
+                        "port" : "30510"
+                    }
+                }
+            ]
+        }
+    ],
+    "routing" : "CapsLock Service",
+    "service-discovery" :
+    {
+        "enable" : "true",
+        "multicast" : "224.224.224.245",
+        "port" : "30490",
+        "protocol" : "udp",
+        "initial_delay_min" : "10",
+        "initial_delay_max" : "100",
+        "repetitions_base_delay" : "200",
+        "repetitions_max" : "3",
+        "ttl" : "3",
+        "cyclic_offer_delay" : "2000",
+        "request_response_delay" : "1500"
+    }
+}
