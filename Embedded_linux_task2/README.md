@@ -53,7 +53,7 @@
 9. Format the Virtual Disk Image Partitions “Explain the command you use”:
    - we use ```mkfs``` command to assign a file system to a partition
    - ```sudo mkfs.vfat -n boot -F16 /dev/loop16p1```
-   - ```sudo mkfs.ext4 -n rootfs /dev/loop16p2```
+   - ```sudo mkfs.ext4 -L rootfs /dev/loop16p2```
    - ![Format](screenshots/format_loop.png)
 <br> </br>  
 
