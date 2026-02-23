@@ -91,3 +91,66 @@ the image file.
     - ![md](screenshots/md.png)
 5. Make the U-Boot banner say “Welcome to Our-Boot – Intake 46”
     - ![qemu1](screenshots/qemu1.png)
+  
+6. Add a custom command hello that prints your name.
+   1. Add Kconfig entry in `cmd/Kconfig` in u-boot directory
+      - ``` 
+        config CMD_SAY_MY_NAME
+        bool "say_my_name"
+        default y
+        help
+        Prints my name.
+        Usage: say_my_name
+         ``` 
+    2. Modify `cmd/Makefile` in u-boot directory
+        - `obj-$(CONFIG_CMD_SAY_MY_NAME) +=  say_my_name.o`
+    3. create `cmd/say_my_name.c` in u-boot directory [say_my_name.c](customCommand/say_my_name.c)
+    4. add in menuconfig
+        - ![menuconfig](screenshots/say_my_name.png)
+    5. run the command
+        - ![sayCMD](screenshots/sayCMD.png)
+<br> </br>
+
+7. Network Booting with TFTP:
+   - a. Set Up a TFTP Server on Your Laptop:
+     - ```bash
+       # install
+       sudo apt-get install tftpd-hpa
+       # configure
+       sudo nano /etc/default/tftpd-hpa
+       #/etc/default/tftpd-hpa
+        TFTP_USERNAME="tftp"
+        TFTP_DIRECTORY="/srv/tftp"
+        TFTP_ADDRESS=":69"
+        TFTP_OPTIONS="--secure --create"
+       ```
+     - restart service
+       - `systemctl restart tftpd-hpa.service`
+   - b. From U-Boot (QEMU or Real RPi) Configure Network & Test:
+     - `sudo qemu-system-arm -M vexpress-a9 -kernel u-boot -nographic -nic tap -net nic`
+     - `setenv ipaddr 192.168.1.3`
+     - `setenv serverip 192.168.1.2`
+     - **(on PC)** `sudo ip a add 192.168.1.2/24 dev tap0`
+     - `ping 192.168.1.2`
+   - c. Load Kernel + DTB via TFTP:
+     - **(on PC)**`cp zImage rpi.dtb /srv/tftp`
+     - **(on u-boot)** `tftp $kernel_addr_r zImage`
+     - `tftp $dtb_addr_r rpi.dtb`
+     - `bootz $kernel_addr_r $dtb_addr_r`
+<br> </br>
+
+8. What is the difference between run and go commands?
+   - `run` : 
+     - run uboot script that is in an environment variable.
+     - doesnt exit u-boot directly
+   - `go` : 
+     - run an application that **doesnt** need a DTB
+     - exits u-boot.
+<br> </br>
+
+9. What is the purpose of bootargs and who reads it?
+   - it is an environment variable that contains the **Linux kernel command line**
+   - its read by the kernel at boot time
+10. Why do we use 0x62000000 and not 0x60000000 for kernel address on Raspberry Pi? 
+    -  because 0x60000000 is part of reserved memory space
+    -  while 0x62000000 is the first free address
