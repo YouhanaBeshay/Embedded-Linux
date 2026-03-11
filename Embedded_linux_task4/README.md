@@ -2,7 +2,7 @@
 
 ## Demo vid:
 
-
+https://github.com/user-attachments/assets/068a7892-60b9-4ea4-a37d-bb50c2e5e405
 
 
 ## Part A : Preparing the Raspberry Pi boot partition
