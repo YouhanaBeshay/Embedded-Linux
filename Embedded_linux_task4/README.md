@@ -1,4 +1,4 @@
-# Bare-Metal Programming : Loadingand Running a Custom Binary from U-Boot
+# Bare-Metal Programming : Loading and Running a Custom Binary from U-Boot
 
 ## Demo vid:
 
