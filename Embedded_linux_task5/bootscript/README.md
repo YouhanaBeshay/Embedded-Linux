@@ -1,0 +1,1 @@
+## Boot script for intializing the u-boot environment
