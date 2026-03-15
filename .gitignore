@@ -5,3 +5,4 @@ build*
 *.image
 *.img
 test
+*.scr
