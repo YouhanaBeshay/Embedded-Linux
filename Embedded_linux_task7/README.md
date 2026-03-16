@@ -49,7 +49,7 @@
     ::wait:/bin/ramfs_hello
 
     ::wait:/bin/shell_script.sh
-    ## shell that doesnt take input form the terminal for some reason :(
+    
     console::respawn:/bin/sh
     ## shutdown (not needed  in ramfs but will be needed in a real rootfs)
     ::shutdown:/bin/umount -a -r

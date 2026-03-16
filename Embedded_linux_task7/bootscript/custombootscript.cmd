@@ -3,7 +3,7 @@ setenv kernel_addr_r 0x80000
 
 # Boot Args
 
-setenv bootargs "console=ttyAMA0,115200n8 loglevel=8 panic=5 rdinit=/sbin/init " 
+setenv bootargs "console=ttyS0,115200 8250.nr_uarts=1 loglevel=8 panic=5 rdinit=/sbin/init " 
 
 
 printenv bootargs
