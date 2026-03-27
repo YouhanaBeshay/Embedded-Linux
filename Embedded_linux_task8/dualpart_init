@@ -1,0 +1,117 @@
+#!/bin/sh
+
+
+# ─── 1. Mount virtual filesystems ────────────────────────────────────────────
+mount -t proc     proc     /proc
+mount -t sysfs    sysfs    /sys
+mount -t devtmpfs devtmpfs /dev
+mount -t tmpfs    tmpfs    /tmp
+
+
+echo "[init] Virtual filesystems mounted."
+
+# ─── 2. Wait for SD card ─────────────────────────────────────────────────────
+# The SD card may not be immediately available after devtmpfs is mounted,
+# so we poll until the block device node appears.
+
+SD_DISK="/dev/mmcblk0"
+PART1="${SD_DISK}p2"
+PART2="${SD_DISK}p3"
+
+echo "[init] Waiting for SD card (${SD_DISK})..."
+TIMEOUT=30
+COUNT=0
+
+while [ ! -b "$SD_DISK" ]; do
+    if [ "$COUNT" -ge "$TIMEOUT" ]; then
+        echo "[init] ERROR: SD card not found after ${TIMEOUT}s. Dropping to shell."
+        exec /bin/sh
+    fi
+    sleep 1
+    COUNT=$((COUNT + 1))
+done
+
+echo "[init] SD card detected. Waiting for partitions..."
+
+# Give the kernel a moment to enumerate the partition table
+sleep 1
+
+# Verify both partitions exist
+if [ ! -b "$PART1" ] || [ ! -b "$PART2" ]; then
+    echo "[init] ERROR: Expected partitions ${PART1} and ${PART2} not found."
+    echo "[init] Available block devices:"
+    ls /dev/mmc* 2>/dev/null || echo "  (none found)"
+    echo "[init] Dropping to shell."
+    exec /bin/sh
+fi
+
+echo "[init] Partitions ready: ${PART1}  ${PART2}"
+
+# ─── 3. Prompt user ──────────────────────────────────────────────────────────
+# Direct output to /dev/console so it appears even before a TTY is set up.
+
+SELECTED_PART=""
+
+while true; do
+    echo ""                                        > /dev/console
+    echo "========================================" > /dev/console
+    echo "  Root filesystem selector"              > /dev/console
+    echo "========================================" > /dev/console
+    echo "  [1]  Partition 1  (${PART1})"          > /dev/console
+    echo "  [2]  Partition 2  (${PART2})"          > /dev/console
+    echo "========================================" > /dev/console
+    printf "  Enter choice [1/2]: "               > /dev/console
+
+    # Read from the console
+    read CHOICE < /dev/console
+
+    case "$CHOICE" in
+        1)
+            SELECTED_PART="$PART1"
+            break
+            ;;
+        2)
+            SELECTED_PART="$PART2"
+            break
+            ;;
+        *)
+            echo "[init] Invalid input. Please enter 1 or 2." > /dev/console
+            ;;
+    esac
+done
+
+echo "[init] User selected: ${SELECTED_PART}"
+
+# ─── 4. Mount the selected partition ─────────────────────────────────────────
+mkdir -p /mnt/newroot
+
+if ! mount "$SELECTED_PART" /mnt/newroot; then
+    echo "[init] ERROR: Failed to mount ${SELECTED_PART}. Dropping to shell."
+    exec /bin/sh
+fi
+
+echo "[init] Mounted ${SELECTED_PART} at /mnt/newroot."
+
+# ─── 5. Sanity check the new root ────────────────────────────────────────────
+# switch_root requires the new root to have /sbin/init (or equivalent).
+
+if [ ! -x /mnt/newroot/sbin/init ] && \
+   [ ! -x /mnt/newroot/bin/init  ] && \
+   [ ! -x /mnt/newroot/init      ]; then
+    echo "[init] WARNING: No init found in new rootfs."
+    echo "[init] Contents of /mnt/newroot:"
+    ls /mnt/newroot
+    echo "[init] Dropping to shell."
+    exec /bin/sh
+fi
+
+# ─── 6. change root ──────────────────────────────────────────────────────────
+echo "[init] About to change root to ${SELECTED_PART}. Press enter to continue..."
+read dummy < /dev/console
+
+
+
+
+# for some reason, switch_root doesn't work correctly in this setup, so we use chroot instead.
+exec chroot /mnt/newroot /sbin/init
+
