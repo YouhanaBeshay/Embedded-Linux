@@ -1,0 +1,13 @@
+[Unit]
+Description= My Example Service
+
+
+ConditionPathExists=/home/youhana/ITI_assignments2/Linux_admin_lab1/Embedded-Linux/Embedded_linux_task9/serviceapp
+
+[Service]
+    Type= simple
+    ExecStart= /home/youhana/ITI_assignments2/Linux_admin_lab1/Embedded-Linux/Embedded_linux_task9/serviceapp
+
+    Restart= on-failure
+    StandardOutput=append:/var/log/myexample.log
+    StandardError=append:/var/log/myexample.log

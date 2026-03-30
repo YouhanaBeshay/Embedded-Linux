@@ -1,0 +1,6 @@
+config BR2_PACKAGE_ITI_QT_GPIO
+	bool "iti-qt-gpio"
+	depends on BR2_PACKAGE_QT6BASE
+    default y
+	help
+	  A Qt6-based GPIO application.
