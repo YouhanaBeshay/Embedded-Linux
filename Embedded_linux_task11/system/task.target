@@ -1,0 +1,6 @@
+[Unit]
+Description= Qt app Target
+Requires=mnt-dummy.mount prep.service qt-app-test.service
+
+[Install]
+WantedBy=graphical.target

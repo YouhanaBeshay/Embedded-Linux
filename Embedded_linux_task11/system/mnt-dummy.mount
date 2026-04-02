@@ -1,0 +1,13 @@
+[Unit]
+Description=  Mount a dummy filesystem for Qt App
+After= prep.service
+[Mount]
+What=/home/youhana/ITI_assignments2/Linux_admin_lab1/Embedded-Linux/Embedded_linux_task11/test/test_fs
+# must be absolute path but also must be same as file name (mnt-dummy
+Where=/mnt/dummy
+Type=ext4
+# to make a loop device 
+Options=loop,rw
+
+[Install]
+WantedBy=task.target

@@ -1,0 +1,26 @@
+[Unit]
+Description= A Qt Multimedia App Service
+
+Requires= prep.service
+Requires=network-online.target
+
+RequiresMountsFor=/mnt/test_mount
+After= prep.service
+After=network-online.target
+
+[Service]
+
+Type=simple
+ExecStart=/home/youhana/ITI_assignments2/Linux_admin_lab1/Embedded-Linux/Embedded_linux_task11/test/appTask6_MultiMediaApp
+# variables needed for QT becuase systemd doesnt see user environment
+Environment=QT_QPA_PLATFORM=wayland
+Environment=WAYLAND_DISPLAY=wayland-0
+Environment=XDG_RUNTIME_DIR=/run/user/1000
+
+
+
+Restart= on-failure
+RestartSec=5
+
+[Install]
+WantedBy=task.target

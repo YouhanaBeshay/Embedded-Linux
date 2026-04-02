@@ -1,0 +1,17 @@
+[Unit]
+Description= A Prepration Service for Qt app
+
+Before=qt-app-test.service
+
+AssertPathExists=/home/youhana/ITI_assignments2/Linux_admin_lab1/Embedded-Linux/Embedded_linux_task11/test/appTask6_MultiMediaApp
+
+[Service]
+Type= oneshot
+
+ExecStart=/home/youhana/ITI_assignments2/Linux_admin_lab1/Embedded-Linux/Embedded_linux_task11/test/dummy-prep.sh
+Restart= on-failure
+
+RemainAfterExit=true
+
+[Install]
+WantedBy=task.target
