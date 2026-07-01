@@ -85,3 +85,9 @@ rmmod rpi_gpio_device
 - **cdev + class**: Modern character device registration with automatic `/dev` node creation via udev.
 - **container_of**: Retrieves per-device data from `inode->i_cdev` in `open()`, cached in `file->private_data`.
 
+## output
+
+
+https://github.com/user-attachments/assets/ebf14dc6-1c87-4c5b-87f4-c72b990f1ace
+
+
