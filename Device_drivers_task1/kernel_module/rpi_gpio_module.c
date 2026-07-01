@@ -14,7 +14,7 @@ static char gpio_current_char = '0';
 
 static struct proc_dir_entry *proc_entry;
 
-DEFINE_MUTEX(my_mutex);
+DEFINE_MUTEX(my_mutex); // to protect the global variable (gpio_current_char)
 
 // ioremapping
 static void __iomem *gpio_base;
@@ -121,4 +121,4 @@ module_exit(rpi_gpio_deinit);
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Youhana Beshay");
-MODULE_DESCRIPTION("Simple module that allows you to read and write from /proc/rpi_gpio");
+MODULE_DESCRIPTION("Simple module that allows you to read and write from /proc/rpi_gpio to set GPIO 26");
